@@ -1,0 +1,31 @@
+{
+  "name": "@aslijia/elasticsearch",
+  "version": "0.0.1",
+  "description": "log4js component for elasticsearch",
+  "main": "./lib/index.js",
+  "scripts": {
+    "publish": "tsc -p tsconfig.json&&npm publish"
+  },
+  "types": "./types/types.d.ts",
+  "files": [
+    "types",
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aslijia/elasticsearch.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aslijia/elasticsearch/issues"
+  },
+  "homepage": "https://github.com/Aslijia/elasticsearch#readme",
+  "devDependencies": {
+    "@types/node": "^12.7.2"
+  },
+  "dependencies": {
+    "elasticsearch": "^16.3.0"
+  }
+}
