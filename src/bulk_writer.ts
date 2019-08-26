@@ -105,7 +105,7 @@ export class BulkWriter {
         thiz.bulk = body.concat(thiz.bulk);
       }
       // eslint-disable-next-line no-console
-      console.error(e);
+      console.error('Elasticsearch connection has error', e);
       this.stop();
       this.checkEsConnection();
     });
@@ -144,6 +144,7 @@ export class BulkWriter {
               return;
             }
             // thiz.esConnection = false;
+            console.error('Cannot connect to Elasticsearch');
             reject(new Error('Cannot connect to ES'));
           }
         );
