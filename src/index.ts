@@ -3,7 +3,11 @@ import { BulkWriter } from "./bulk_writer";
 
 
 declare interface Configure {
-    host: string
+    host: string,
+    pipeline?: string,
+    bulk?: number,
+    waitForActiveShards?: string,
+    interval?: number
 }
 
 export function configure(cfg: Configure) {
@@ -11,7 +15,13 @@ export function configure(cfg: Configure) {
         host: cfg.host || 'http://localhost:9200',
         keepAlive: true
     };
-    const bulk = new BulkWriter(new Client(opts), {});
+    const bulk = new BulkWriter(new Client(opts), {
+        pipeline: cfg.pipeline,
+        buffering: cfg.bulk ? true : false,
+        bufferLimit: cfg.bulk,
+        waitForActiveShards: cfg.waitForActiveShards,
+        interval: cfg.interval
+    });
     bulk.start();
 
     return function (event: any) {

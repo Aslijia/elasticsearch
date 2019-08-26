@@ -86,7 +86,7 @@ export class BulkWriter {
       body,
       waitForActiveShards: this.waitForActiveShards,
       timeout: this.interval + 'ms',
-      type: this.options.type || 'logs4js'
+      type: 'logs4js'
     }).then((res) => {
       if (res.errors && res.items) {
         res.items.forEach((item: { index: { error: any; }; }) => {
