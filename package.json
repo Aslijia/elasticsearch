@@ -1,10 +1,10 @@
 {
   "name": "@aslijia/elasticsearch",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "log4js component for elasticsearch",
   "main": "./lib/index.js",
   "scripts": {
-    "publish": "tsc -p tsconfig.json&&npm publish"
+    "build": "tsc -p tsconfig.json&&npm publish"
   },
   "types": "./types/types.d.ts",
   "files": [
