@@ -1,6 +1,6 @@
 {
   "name": "@aslijia/elasticsearch",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "log4js component for elasticsearch",
   "main": "./lib/index.js",
   "scripts": {
@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/Aslijia/elasticsearch#readme",
   "devDependencies": {
+    "@types/elasticsearch": "^5.0.34",
     "@types/node": "^12.7.2"
   },
   "dependencies": {
