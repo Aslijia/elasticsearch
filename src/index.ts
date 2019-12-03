@@ -27,7 +27,7 @@ export function configure(cfg: Configure) {
         bulk.start();
     }
     return function (event: any) {
-        const body = event.data[1] ? event.data[1] : {};
+        const body = typeof event.data[1] === 'object' ? event.data[1] : {};
         body.message = event.data[0];
         if (bulk) {
             bulk.append(event.categoryName, 'doc', {
