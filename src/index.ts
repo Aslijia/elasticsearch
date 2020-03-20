@@ -39,7 +39,7 @@ export function configure(cfg: Configure) {
             body.title = event.data[0];
             body.timestamp = event.startTime;
             if (bulk) {
-                bulk.append(event.categoryName, event.level.levelStr, body);
+                bulk.append(`${event.categoryName}.${body.title}`, event.level.levelStr, body);
             }
         }
     }
