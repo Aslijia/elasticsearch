@@ -26,13 +26,21 @@ export function configure(cfg: Configure) {
         });
         bulk.start();
     }
+    /// event
+    /// startTime: 2020-03-20T03:23:31.249Z,
+    /// categoryName: 'els-test',
+    /// data: [ '\u001b[36m\u001b[39mauthorize', { type: 'sms', data: [Object] } ],
+    /// level: Level { level: 10000, levelStr: 'DEBUG', colour: 'cyan' },
+    /// context: {},
+    /// pid: 9296
     return function (event: any) {
-        const body = typeof event.data[1] === 'object' ? event.data[1] : {};
-        body.message = event.data[0];
-        if (bulk) {
-            bulk.append(event.categoryName, 'doc', {
-                level: event.level.levelStr, category: event.categoryName, timestamp: Date.now(), body
-            });
+        if (event.data.length > 1) {
+            const body = typeof event.data[1] === 'object' ? event.data[1] : {};
+            body.title = event.data[0];
+            body.timestamp = event.startTime;
+            if (bulk) {
+                bulk.append(event.categoryName, event.level.levelStr, body);
+            }
         }
     }
 }
