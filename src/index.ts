@@ -26,20 +26,24 @@ export function configure(cfg: Configure) {
         });
         bulk.start();
     }
+
     /// event
     /// startTime: 2020-03-20T03:23:31.249Z,
     /// categoryName: 'els-test',
-    /// data: [ '\u001b[36m\u001b[39mauthorize', { type: 'sms', data: [Object] } ],
+    /// data: [ 'authorize', { type: 'sms', data: [Object] } ],
     /// level: Level { level: 10000, levelStr: 'DEBUG', colour: 'cyan' },
     /// context: {},
     /// pid: 9296
     return function (event: any) {
-        if (event.data.length > 1) {
-            const body = typeof event.data[1] === 'object' ? event.data[1] : {};
-            body.title = event.data[0];
-            body.timestamp = event.startTime;
+        const index = event.data[2];
+        if (index && typeof index === 'string') {
             if (bulk) {
-                bulk.append(`${event.categoryName}.${body.title}`, event.level.levelStr, body);
+                bulk.append(index, event.level.levelStr, {
+                    category: event.categoryName,
+                    time: event.startTime,
+                    message: event.data[0],
+                    context: event.data[1]
+                });
             }
         }
     }
