@@ -1,5 +1,5 @@
 import { Client, ClientOptions } from "@elastic/elasticsearch";
-import { isObject } from "util";
+import { isObject, isUndefined } from "util";
 
 let bulk: Client;
 
@@ -12,7 +12,7 @@ export function configure(cfg: ClientOptions) {
         const message = event.data[0];
         const context = event.data[1] || {};
         for (let i in context) {
-            context[i] = isObject(context[i]) ? JSON.stringify(context[i]) : context[i].toString();
+            context[i] = isObject(context[i]) ? JSON.stringify(context[i]) : isUndefined(context[i]) ? 'undefined' : context[i];
         }
 
         bulk.index({
@@ -31,6 +31,8 @@ export function configure(cfg: ClientOptions) {
                 },
                 pid: event.pid
             }
+        }).catch(err => {
+            console.error('lo4js append logger to elasticsearch failed', { event, message: err.message });
         });
     }
 }
