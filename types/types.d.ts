@@ -1,9 +1,3 @@
-export interface Configure {
-    host: string,
-    pipeline?: string,
-    bulk?: number,
-    waitForActiveShards?: string,
-    interval?: number
-}
+import { ClientOptions } from '@elastic/elasticsearch';
 
-export function configure(cfg: Configure): Function;
+export function configure(cfg: ClientOptions): Function;

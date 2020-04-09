@@ -1,50 +1,36 @@
-import { Client, ConfigOptions } from "elasticsearch";
-import { BulkWriter } from "./bulk_writer";
+import { Client, ClientOptions } from "@elastic/elasticsearch";
+import { isObject } from "util";
 
-declare interface Configure {
-    host: string,
-    pipeline?: string,
-    bulk?: number,
-    waitForActiveShards?: string,
-    interval?: number
-}
+let bulk: Client;
 
-let bulk: BulkWriter | undefined;
-
-export function configure(cfg: Configure) {
-    const opts: ConfigOptions = {
-        host: cfg.host || 'http://localhost:9200',
-        keepAlive: true
-    };
+export function configure(cfg: ClientOptions) {
     if (!bulk) {
-        bulk = new BulkWriter(new Client(opts), {
-            pipeline: cfg.pipeline,
-            buffering: cfg.bulk ? true : false,
-            bufferLimit: cfg.bulk,
-            waitForActiveShards: cfg.waitForActiveShards,
-            interval: cfg.interval
-        });
-        bulk.start();
+        bulk = new Client(cfg);
     }
 
-    /// event
-    /// startTime: 2020-03-20T03:23:31.249Z,
-    /// categoryName: 'els-test',
-    /// data: [ 'authorize', { type: 'sms', data: [Object] } ],
-    /// level: Level { level: 10000, levelStr: 'DEBUG', colour: 'cyan' },
-    /// context: {},
-    /// pid: 9296
     return function (event: any) {
-        const index = event.data[2];
-        if (index && typeof index === 'string') {
-            if (bulk) {
-                bulk.append(index, event.level.levelStr, {
-                    category: event.categoryName,
-                    time: event.startTime,
-                    message: event.data[0],
-                    context: event.data[1]
-                });
-            }
+        const message = event.data[0];
+        const context = event.data[1] || {};
+        for (let i in context) {
+            context[i] = isObject(context[i]) ? JSON.stringify(context[i]) : context[i].toString();
         }
+
+        bulk.index({
+            index: event.categoryName,
+            type: 'log4js',
+            body: {
+                time: event.startTime,
+                category: event.categoryName,
+                level: event.level.levelStr.toLocaleLowerCase(),
+                message,
+                context,
+                trace: {
+                    filename: event.data[2] || 'unknown',
+                    function: event.data[3] || 'unknown',
+                    line: event.data[4] || -1
+                },
+                pid: event.pid
+            }
+        });
     }
 }
