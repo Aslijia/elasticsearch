@@ -1,21 +1,29 @@
 import { Client, ClientOptions } from "@elastic/elasticsearch";
-import { isObject, isUndefined } from "util";
+import { isObject, isUndefined, isArray, isNull, isNumber } from "util";
 
-let bulk: Client;
+let client: Client;
+
+function resolve(o: any) {
+    for (let i in o) {
+        if (isObject(o[i])) {
+            o[i] = resolve(o[i]);
+        } else if (isUndefined(o[i]) || isNull(o[i])) {
+            delete o[i];
+        }
+    }
+    return o;
+}
 
 export function configure(cfg: ClientOptions) {
-    if (!bulk) {
-        bulk = new Client(cfg);
+    if (!client) {
+        client = new Client(cfg);
     }
 
     return function (event: any) {
         const message = event.data[0];
-        const context = event.data[1] || {};
-        for (let i in context) {
-            context[i] = isObject(context[i]) ? JSON.stringify(context[i]) : isUndefined(context[i]) ? 'undefined' : context[i];
-        }
+        const context = resolve(isObject(event.data[1]) ? event.data[1] : {});
 
-        bulk.index({
+        client.index({
             index: event.categoryName,
             type: 'log4js',
             body: {
