@@ -1,6 +1,6 @@
 {
   "name": "@aslijia/elasticsearch",
-  "version": "1.5.3",
+  "version": "1.5.6",
   "description": "log4js component for elasticsearch",
   "main": "./lib/index.js",
   "scripts": {
