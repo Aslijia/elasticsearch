@@ -30,7 +30,7 @@ export function configure(cfg: ClientOptions) {
 			})
 			.catch((err) => {
 				console.error('elasticsearch write failed:', {
-					message: err.meta.body.error,
+					message: err.meta.body.error.reason,
 					category: `${event.categoryName}[${message}]`,
 				})
 			})
