@@ -38,4 +38,5 @@ export function configure(cfg: ClientOptions) {
 				})
 			})
 	}
+	return els
 }
