@@ -30,12 +30,18 @@ export function configure(cfg: ClientOptions) {
 			})
 			.catch((err) => {
 				els({
-					categoryName: 'accidental',
+					categoryName: 'elasticsearch',
 					startTime: event.startTime,
 					pid: event.pid,
 					level: event.level,
 					data: ['elasticsearch write failed', err.meta],
 				})
+				console.error(
+					'elasticsearch write failed',
+					event.categoryName,
+					message,
+					err.meta
+				)
 			})
 	}
 	return els
