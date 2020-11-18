@@ -7,7 +7,7 @@ export function configure(cfg: ClientOptions) {
 		client = new Client(cfg)
 	}
 
-	return function (event: any) {
+	const els = function (event: any) {
 		const message = event.data[0]
 		const context = event.data[1] || {}
 		client
@@ -21,17 +21,20 @@ export function configure(cfg: ClientOptions) {
 					message,
 					context,
 					trace: {
-						filename: event.data[2] || 'unknown',
-						function: event.data[3] || 'unknown',
+						filename: event.data[2] || '-',
+						function: event.data[3] || '-',
 						line: event.data[4] || -1,
 					},
 					pid: event.pid,
 				},
 			})
 			.catch((err) => {
-				console.error('elasticsearch write failed:', {
-					message: err.meta.body.error.reason,
-					category: `${event.categoryName}[${message}]`,
+				els({
+					categoryName: 'accidental',
+					startTime: event.startTime,
+					pid: event.pid,
+					level: event.level,
+					data: ['elasticsearch write failed', err.meta],
 				})
 			})
 	}
