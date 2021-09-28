@@ -1,4 +1,5 @@
 import { Client, ClientOptions } from '@elastic/elasticsearch'
+import { appendFile } from 'fs'
 
 let client: Client | undefined
 
@@ -35,14 +36,7 @@ function post2els(content: Content) {
 			},
 		})
 		.catch((err) => {
-			post2els({
-				categoryName: 'unplanned',
-				startTime: content.startTime,
-				level: content.level,
-				data: [content.data[0], err.meta],
-				pid: content.pid,
-			})
-			console.error(err.meta)
+			appendFile(`~/.els`, JSON.stringify(err.meta, null, 4), () => {})
 		})
 }
 
