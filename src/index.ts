@@ -1,5 +1,6 @@
 import { Client, ClientOptions } from '@elastic/elasticsearch'
 import { appendFile } from 'fs'
+import { homedir } from 'os'
 
 let client: Client | undefined
 
@@ -36,7 +37,12 @@ function post2els(content: Content) {
 			},
 		})
 		.catch((err) => {
-			appendFile(`~/.els`, JSON.stringify(err.meta, null, 4), () => {})
+			console.error(err.meta)
+			appendFile(
+				`${homedir()}/els-${process.pid}.log`,
+				JSON.stringify(err.meta, null, 4),
+				() => {}
+			)
 		})
 }
 
