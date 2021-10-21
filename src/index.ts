@@ -37,10 +37,12 @@ function post2els(content: Content) {
 			},
 		})
 		.catch((err) => {
-			console.error(err.meta)
 			appendFile(
 				`${homedir()}/els-${process.pid}.log`,
-				JSON.stringify(err.meta, null, 4),
+				'>>:\n' +
+					JSON.stringify(content, null, 4) +
+					'/n' +
+					err.body.error.reason,
 				() => {}
 			)
 		})
