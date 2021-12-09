@@ -1,3 +1,3 @@
-import { ClientOptions } from '@elastic/elasticsearch';
+import { ClientOptions } from '@elastic/elasticsearch'
 
-export function configure(cfg: ClientOptions): Function;
+export function configure(cfg: ClientOptions): Function
