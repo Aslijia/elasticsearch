@@ -21,6 +21,7 @@ function post2els(content: Content) {
     client
         .index({
             index: content.categoryName,
+            type: '_doc',
             body: {
                 time: content.startTime,
                 category: content.categoryName,
